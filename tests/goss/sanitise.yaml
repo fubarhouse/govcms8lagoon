@@ -26,7 +26,7 @@ file:
     exists: false
   {{if .Env.LAGOON | regexMatch "nginx"}}
   /app/web/robots.txt:
-    contains: ["User-agent: *", "Disallow: /"]
+    contains: "User-agent: *\nDisallow: /\n"
   {{end}}
   /app/web/.editorconfig:
     exists: false
