@@ -24,8 +24,10 @@ file:
     exists: false
   /app/web/web.config:
     exists: false
-  /app/web/robots.txt:
-    exists: true
+  {{if .Env.LAGOON | regexMatch "nginx"}}
+  /app/web/robots.txt:
+    contains: ["User-agent: *", "Disallow: /"]
+  {{end}}
   /app/web/.editorconfig:
     exists: false
   /app/web/favicon.ico:
