@@ -37,3 +37,8 @@ RUN chmod 444 /app/web/sites/default/settings.php
 
 # Define where the Drupal Root is located
 ENV WEBROOT=web
+
+RUN apk add openssh openrc && \
+    rc-update add sshd
+
+EXPOSE 22
