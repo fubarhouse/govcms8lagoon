@@ -6,7 +6,7 @@ COPY --from=cli /home/.drush/ /home/.drush/
 RUN rm -rf /app \
     && apk add git curl openssh \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer global require drush/drush:^8
+    && composer global require drush/drush:^9
 
 COPY .docker/images/test/drutiny /usr/bin/drutiny
 
