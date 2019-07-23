@@ -1,10 +1,11 @@
 ARG CLI_IMAGE
 FROM ${CLI_IMAGE} AS cli
 FROM govcms8lagoon/php
-COPY --from=cli /home/.drush/ /home/.drush/
 
-RUN rm -rf /app \
-    && apk add git curl openssh \
+# Copy the Drupal codebase (for now).
+COPY --from=cli /app/ /var/www/drupal
+
+RUN apk add git curl openssh \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && composer global require drush/drush:^9
 
