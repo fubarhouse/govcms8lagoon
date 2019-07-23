@@ -19,6 +19,8 @@ RUN git clone --single-branch --branch=$SITE_AUDIT_VERSION https://github.com/go
 # Ensure that drush and drush.launcher both work
 ENV WEBROOT=web
 
+ENV PATH=$PATH:/home/.composer/vendor/bin/
+
 # Add custom drutiny profiles from test folder for local development
 COPY .docker/images/test/*.yml /app/Profiles/
 
