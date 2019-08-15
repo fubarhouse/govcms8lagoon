@@ -16,6 +16,8 @@ IMAGE_TAG_EDGE=${IMAGE_TAG_EDGE:-beta}
 FORCE_IMAGE_BUILD=${FORCE_IMAGE_BUILD:-}
 # Path prefix to Dockerfiles extension that is used as a name of the service.
 FILE_EXTENSION_PREFIX=${FILE_EXTENSION_PREFIX:-.docker/Dockerfile.}
+# CLI Image name
+CLI_IMAGE=${DOCKERHUB_NAMESPACE:-govcms8lagoon}/govcms8
 
 for file in $(echo $FILE_EXTENSION_PREFIX"*"); do
     service=${file/$FILE_EXTENSION_PREFIX/}
@@ -28,18 +30,19 @@ for file in $(echo $FILE_EXTENSION_PREFIX"*"); do
     # Only rebuild images if they do not exist or rebuild is forced.
     if [ "$existing_image" == "" ] || [ "$FORCE_IMAGE_BUILD" != "" ]; then
       echo "==> Building \"$service\" image from file $file for service \"$DOCKERHUB_NAMESPACE/$service\""
-      docker build -f $file -t $DOCKERHUB_NAMESPACE/$service .
+      docker build -f $file -t $DOCKERHUB_NAMESPACE/$service --build-arg CLI_IMAGE=${CLI_IMAGE} .
     fi
 
     # Tag images with 'edge' tag and push.
-    echo "==> Tagged and pushed \"$service\" image to $DOCKERHUB_NAMESPACE/$service:$IMAGE_TAG_EDGE"
-    docker tag $DOCKERHUB_NAMESPACE/$service $DOCKERHUB_NAMESPACE/$service:$IMAGE_TAG_EDGE
-    docker push $DOCKERHUB_NAMESPACE/$service:$IMAGE_TAG_EDGE
+    CI_IMAGE_NAME=${CI_REGISTRY}/${DOCKERHUB_NAMESPACE}/$service;
+    echo "==> Tagged and pushed \"$service\" image to $CI_IMAGE_NAME:$IMAGE_TAG_EDGE"
+    docker tag $DOCKERHUB_NAMESPACE/$service $CI_IMAGE_NAME:$IMAGE_TAG_EDGE
+    docker push $CI_IMAGE_NAME:$IMAGE_TAG_EDGE
 
     # Tag images with version tag, if provided, and push.
     if [ "$version_tag" != "" ]; then
-      echo "==> Tagging and pushing \"$service\" image to $DOCKERHUB_NAMESPACE/$service:$version_tag"
-      docker tag $DOCKERHUB_NAMESPACE/$service $DOCKERHUB_NAMESPACE/$service:$version_tag
-      docker push $DOCKERHUB_NAMESPACE/$service:$version_tag
+      echo "==> Tagging and pushing \"$service\" image to $CI_IMAGE_NAME:$version_tag"
+      docker tag $DOCKERHUB_NAMESPACE/$service $CI_IMAGE_NAME:$version_tag
+      docker push $CI_IMAGE_NAME:$version_tag
     fi
 done
