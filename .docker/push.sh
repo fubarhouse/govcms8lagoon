@@ -33,20 +33,14 @@ for file in $(echo $FILE_EXTENSION_PREFIX"*"); do
       docker build -f $file -t $DOCKERHUB_NAMESPACE/$service --build-arg CLI_IMAGE=${CLI_IMAGE} .
     fi
 
-    # Tag images with 'edge' tag and push.
-    CI_IMAGE_NAME=${CI_REGISTRY}/${DOCKERHUB_NAMESPACE}/$service;
-    echo "==> Tagged and pushed \"$service\" image to $CI_IMAGE_NAME:$IMAGE_TAG_EDGE"
-    docker tag $DOCKERHUB_NAMESPACE/$service $CI_IMAGE_NAME:$IMAGE_TAG_EDGE
-    docker push $CI_IMAGE_NAME:$IMAGE_TAG_EDGE
-
-    # Tag images with 'edge' tag and push.
+    # Tag images with the tag associated to the commit.
     if [ "${IMAGE_TAG_EDGE}" != "" ]; then
       echo "==> Tagging and pushing \"$service\" image to $CI_IMAGE_NAME:$IMAGE_TAG_EDGE"
       docker tag $DOCKERHUB_NAMESPACE/$service $CI_IMAGE_NAME:$IMAGE_TAG_EDGE
       docker push $CI_IMAGE_NAME:$IMAGE_TAG_EDGE
     fi
 
-    # Tag images with version tag, if provided, and push.
+    # Tag images with latest.
     if [ "$version_tag" != "" ]; then
       echo "==> Tagging and pushing \"$service\" image to $CI_IMAGE_NAME:$version_tag"
       docker tag $DOCKERHUB_NAMESPACE/$service $CI_IMAGE_NAME:$version_tag
