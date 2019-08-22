@@ -24,6 +24,9 @@ build:
         export IMAGE_VERSION_TAG="${IMAGE_VERSION_TAG:-${CI_COMMIT_REF_NAME}}";
       fi
 
+    # Cleanup tag
+    - export IMAGE_VERSION_TAG=${IMAGE_VERSION_TAG//:/}
+
     # Docker-Compose file linting (check for syntax errors)
     - docker-compose config -q
     # Add Environment variables stored in code.
