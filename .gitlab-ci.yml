@@ -16,7 +16,7 @@ build:
 
     # Export dynamic variables
     - export DOCKERHUB_NAMESPACE="${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
-    - export IMAGE_VERSION_TAG="${CI_COMMIT_SHA}";
+    - export IMAGE_VERSION_TAG="${IMAGE_VERSION_TAG:-latest}";
     - export IMAGE_VERSION_TAG_PREFIX="";
 
     # Docker-Compose file linting (check for syntax errors)
