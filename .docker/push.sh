@@ -11,7 +11,7 @@ IMAGE_VERSION_TAG=${IMAGE_VERSION_TAG:-}
 # prevent stripping of the version.
 IMAGE_VERSION_TAG_PREFIX=${IMAGE_VERSION_TAG_PREFIX:-8.x-}
 # Docker image edge tag.
-IMAGE_TAG_EDGE=${IMAGE_TAG_EDGE:-beta}
+IMAGE_TAG_EDGE=${CI_COMMIT_TAG:-}
 # Flag to force image build.
 FORCE_IMAGE_BUILD=${FORCE_IMAGE_BUILD:-}
 # Path prefix to Dockerfiles extension that is used as a name of the service.
@@ -38,6 +38,13 @@ for file in $(echo $FILE_EXTENSION_PREFIX"*"); do
     echo "==> Tagged and pushed \"$service\" image to $CI_IMAGE_NAME:$IMAGE_TAG_EDGE"
     docker tag $DOCKERHUB_NAMESPACE/$service $CI_IMAGE_NAME:$IMAGE_TAG_EDGE
     docker push $CI_IMAGE_NAME:$IMAGE_TAG_EDGE
+
+    # Tag images with 'edge' tag and push.
+    if [ "${IMAGE_TAG_EDGE}" != "" ]; then
+      echo "==> Tagging and pushing \"$service\" image to $CI_IMAGE_NAME:$IMAGE_TAG_EDGE"
+      docker tag $DOCKERHUB_NAMESPACE/$service $CI_IMAGE_NAME:$IMAGE_TAG_EDGE
+      docker push $CI_IMAGE_NAME:$IMAGE_TAG_EDGE
+    fi
 
     # Tag images with version tag, if provided, and push.
     if [ "$version_tag" != "" ]; then
