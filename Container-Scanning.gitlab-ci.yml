@@ -1,5 +1,5 @@
-build:
-  stage: test
+container_scanning:
+  stage: build
   image: docker:stable
   variables:
     DOCKER_DRIVER: overlay2
