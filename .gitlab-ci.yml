@@ -6,10 +6,10 @@ services:
   - "docker:dind"
 
 stages:
-  - build
-  - container_scanning
+  - Build
+  - Scan
 
-build:
+Build:
 
   stage: build
 
@@ -60,8 +60,8 @@ build:
     # Clean-up.
     - docker-compose down
 
-container_scanning:
-  stage: container_scanning
+Scan:
+  stage: scan
   image: docker:stable
   variables:
     DOCKER_DRIVER: overlay2
