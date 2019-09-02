@@ -7,7 +7,7 @@ services:
 
 stages:
   - Build
-  - container_scanning
+  - test
 
 include:
   template: Container-Scanning.gitlab-ci.yml
