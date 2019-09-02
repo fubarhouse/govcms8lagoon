@@ -1,4 +1,4 @@
-container_scanning:
+build:
   stage: test
   image: docker:stable
   variables:
